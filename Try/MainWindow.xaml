@@ -1,0 +1,40 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Try"
+        xmlns:awe="http://schemas.awesomium.com/winfx" x:Class="Try.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="420" Width="700">
+    <DockPanel HorizontalAlignment="Stretch"   VerticalAlignment="Stretch" >
+        <Grid DockPanel.Dock="Bottom" Height="80" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="2.7*"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="stateLabel" Grid.Row="1" Background="#FFE0F7FF" BorderThickness="0" ></Label>
+            <Button x:Name="AddButton"  Content="Add" Grid.Row="0" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="90" Click="button_Click" Height="30" Margin="0,15,172,0" Background="#FFE9EDF1"/>
+            <Button x:Name="OkButton" Content="Ok" Grid.Row="0" HorizontalAlignment="Right" Margin="0,15,60,0" VerticalAlignment="Top" Width="90" Height="30" Background="#FFE9EDF1" Click="OkButton_Click"/>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Height="30"></Grid>
+        <Grid DockPanel.Dock="Left" Width="60"></Grid>
+        <Grid DockPanel.Dock="Right" Width="60"></Grid>
+        <ListBox x:Name="UsersListBox" Background="#FFE0F7FF" FontSize="20">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type local:User}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>
+                            <Hyperlink TextDecorations="None" RequestNavigate="Hyperlink_OnRequestNavigate" NavigateUri="{Binding Id}">
+                            <Image Margin="3" Source="{Binding ProfilePicture}"/>
+                            </Hyperlink>
+                        </TextBlock>
+                        <TextBlock x:Name="tB" Margin="3" Text="{Binding FullName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
+
+</Window>

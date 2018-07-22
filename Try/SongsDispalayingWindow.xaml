@@ -1,0 +1,183 @@
+﻿<Window x:Name="SongDisplayingWindow" x:Class="Try.SongsDispalayingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Try"
+        mc:Ignorable="d"
+        Title="Songs" Height="800" Width="1200">
+    <Window.Resources>
+        <Style x:Key="MyTextStyle">
+            <Setter Property="Control.FontFamily" Value="Tahoma"/>
+            <Setter Property="Control.FontSize" Value="17" />
+            <Setter Property="Control.Foreground" Value="#FF2B587A"/>
+        </Style>
+        <Style x:Key="MediaPlayerButtonStyle">
+            <Setter Property="Control.FontFamily" Value="Calibri"></Setter>
+            <Setter Property="Control.FontSize" Value="12"></Setter>
+            <Setter Property="Control.FontWeight" Value="Bold"></Setter>
+            <Setter Property="Control.Padding" Value="0"></Setter>
+            <Setter Property="Control.Margin" Value="5"></Setter>
+            <Setter Property="Button.Height" Value="20"></Setter>
+            <Setter Property="Button.Width" Value="50"></Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+        <DockPanel DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" Click="OpenButton_OnClick"/>
+                    <MenuItem Header="_Close"/>
+                    <MenuItem Header="_Save" Click="SaveButton_OnClick"/>
+                </MenuItem>
+                <MenuItem Header="Playlist">
+                    <MenuItem Header="Open" Click="OpenButton_OnClick"/>
+                    <MenuItem Header="Open All"/>
+                    <Separator></Separator>
+                    <MenuItem Header="Save" Click="SaveButton_OnClick"/>
+                    <MenuItem Header="Save As" Click="SaveButton_OnClick"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        <Grid DockPanel.Dock="Bottom" Height="80" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="2.7*"/>
+            </Grid.RowDefinitions>
+            <Grid  Grid.Row="1" Background="#FF2EA2CB">
+                <TextBlock TextAlignment="Justify" x:Name="StateLabel" Margin="5,2,5,5"  Foreground="AliceBlue" FontSize="14" />
+            </Grid>
+            <Button x:Name="AddButton"  Content="Add" Grid.Row="0" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="90" Height="30" Margin="0,15,172,0" Background="#FFE9EDF1"/>
+            <Button x:Name="OkButton" Content="Ok" Grid.Row="0" HorizontalAlignment="Right" Margin="0,15,60,0" VerticalAlignment="Top" Width="90" Height="30" Background="#FFE9EDF1"/>
+        </Grid>
+        <Grid DockPanel.Dock="Top" Height="100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="25*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="3" Grid.Row="0" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <TextBlock x:Name="SongNameTextBox" Grid.Row="0" Grid.Column="0" Margin="5,5,5,5"/>
+                <MediaElement MediaEnded="SongPlayingMediaElement_OnMediaEnded" x:Name="SongPlayingMediaElement" Grid.Column="0" Grid.Row="1" LoadedBehavior="Manual" ></MediaElement>
+                <ProgressBar Foreground="#FF2EA2CB" Margin="5,0,5,0" x:Name="SongProgressBar" Grid.Row="1" Grid.Column="0" ></ProgressBar>
+                <Slider Opacity="0" IsMoveToPointEnabled="True" x:Name="SongProgressSlider"  Grid.Row="1" Grid.Column="0" ></Slider>
+                <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+                    <Button Style="{StaticResource MediaPlayerButtonStyle}" Click="PlayButton_OnClick" Content="Play"/>
+                    <Button Style="{StaticResource MediaPlayerButtonStyle}" Click="StopButton_OnClick" Content="Stop" />
+                    <Button x:Name="PauseButton" Style="{StaticResource MediaPlayerButtonStyle}" Click="PauseButton_OnClick" Content="Pause" />
+                    <Button Style="{StaticResource MediaPlayerButtonStyle}" Click="PreviousButton_OnClick" Content="Previous" />
+                    <Button Style="{StaticResource MediaPlayerButtonStyle}" Click="NextButton_OnClick" Content="Next" />
+                    <TextBlock Margin="10,6,0,0">Volume:</TextBlock>
+                    <Slider Width="100" Minimum="0" Maximum="1" IsMoveToPointEnabled="True" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2" TickFrequency="0.05" TickPlacement="BottomRight" IsSnapToTickEnabled="True" Margin="2,6,0,0" Value="{Binding ElementName=SongPlayingMediaElement, Path=Volume, Mode=TwoWay}"></Slider>
+                    <TextBlock x:Name="CurrentPosition"  Margin="10,6,0,0"></TextBlock>
+                    <TextBlock x:Name="SongDuration" Margin="0,6,0,0"></TextBlock>
+                </StackPanel>
+                <ListBox x:Name="CurrentSongsListBox" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"></ListBox>
+            </Grid>
+            <Border Grid.Row="1" Grid.Column="1" Margin="0,0,0,5">
+                <StackPanel Orientation="Horizontal" DataContext="{Binding Source=User}" Background="FloralWhite" >
+                    <TextBlock Margin="2">
+                            <Hyperlink x:Name="HLink" TextDecorations="None" RequestNavigate="Hyperlink_OnRequestNavigate" NavigateUri="{Binding Id}">
+                            <Image x:Name="ProfileImage" Source="{Binding ProfilePicture}"/>
+                            </Hyperlink>
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource MyTextStyle}" x:Name="NameTextBlock" Margin="5,0,0,0"  Text="{Binding FullName}"  />
+                </StackPanel>
+            </Border>
+        </Grid>
+        <StackPanel Width="100" DockPanel.Dock="Left" Orientation="Vertical">
+            <Button Padding="5" Margin="5,5,5,5" Click="MyAudioButton_OnClick">My Audio</Button>
+            <Button Padding="5" Margin="5,5,5,5" Click="GetPlaylistButton_OnClick">Vk album</Button>
+            <ComboBox x:Name="AlbumsVkComboBox" Padding="10" Margin="10,10,10,10" DisplayMemberPath="Title"/>
+            <Button Padding="5" Margin="5,5,5,5" Content="New tab" Click="AddNewTabButton_OnClick"/>
+            <Button Padding="5" Margin="5,5,5,5" Click="SearchButton_OnClick">Search</Button>
+            <Button Padding="5" Margin="5,5,5,5" Content="Open playlist" Click="OpenButton_OnClick"/>
+            <Separator></Separator>
+            <Button Padding="5" Margin="5,5,5,5" Click="CopyButton_OnClick" Content="Copy to"/>
+            <ComboBox x:Name="TabsComboBox" Padding="10" Margin="10,10,10,10"/>
+            <Separator></Separator>
+            <Button Padding="5" Margin="5,5,5,5" Click="SaveButton_OnClick" Content="Save"/>
+            <Button Padding="5" Margin="5,5,5,5" Click="SaveAsButton_OnClick" Content="Save Ass"/>
+            <Button Padding="5" Margin="5,5,5,5" Click="ButtonBase_OnClick"  Content="Test"/>
+
+        </StackPanel>
+
+        <StackPanel Width="100" DockPanel.Dock="Right" Orientation="Vertical">
+            <Button Padding="10" Margin="10,10,10,10" Content="Download" Click="DownloadButtonClick"/>
+            <Button x:Name="CancelButton" Padding="10" Margin="10,10,10,10" Content="Cancel" Click="CancellButton_Click"/>
+            <Button Padding="10" Margin="10,10,10,10" Content="Edit" Click="ChangeButton_OnClick"/>
+            <Button Padding="10" Margin="10,10,10,10" Content="Delete" Click="DeleteButton_OnClick"/>
+        </StackPanel>
+
+        <TabControl x:Name="MyTabControl" ItemsSource="{Binding SongTab}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel >
+                        <TextBlock MouseDown="TitleTextBlock_OnMouseDown" Text="{Binding Title}" Padding="2" FontSize="14"/>
+                        <Button Content="X" Click="CloseButton_OnClick" Height="19" HorizontalAlignment="Right" Margin="0,3,4,0" 
+                            Name="ButtonCloseClick"  VerticalAlignment="Top" Width="20" FontFamily="Courier" 
+                            FontWeight="Bold" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+                            FontStretch="Normal" Visibility="Visible" 
+                            FontSize="14"   Padding="1" ToolTip="Close" />
+                    </DockPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <ListView x:Name="SongsListView" ItemsSource="{Binding SongCollection}" MouseDoubleClick="SongsListView_OnMouseDoubleClick">
+                        <ListView.View>
+                            <GridView x:Name="SongGridView">
+                                <GridViewColumn Header="Artist" Width="175" DisplayMemberBinding="{Binding Artist}"></GridViewColumn>
+                                <GridViewColumn Header="Title" Width="250" DisplayMemberBinding="{Binding Title}"></GridViewColumn>
+                                <GridViewColumn Header="Duration" DisplayMemberBinding="{Binding Duration}"></GridViewColumn>
+                                <GridViewColumn Header="Lyrics" Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="local:Song">
+                                            <Expander ExpandDirection="Down" Expanded="Lyrics_OnExpanded" >
+                                                <TextBox x:Name="SongLyrics" 
+                                                    FontSize="10" 
+                                                    TextWrapping="Wrap" 
+                                                    MaxHeight="400" 
+                                                    VerticalScrollBarVisibility="Visible" 
+                                                    IsReadOnly="True" />
+                                            </Expander>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Sugested lyrics Lyrics" Width="300">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="local:Song">
+                                            <Expander ExpandDirection="Down" Expanded="SugestedLyrics_OnExpanded" >
+                                                <TextBox x:Name="SongLyrics" 
+                                                    FontSize="10" 
+                                                    TextWrapping="Wrap" 
+                                                    MaxHeight="400" 
+                                                    VerticalScrollBarVisibility="Visible" 
+                                                    IsReadOnly="True"  />
+                                            </Expander>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </DockPanel>
+</Window>

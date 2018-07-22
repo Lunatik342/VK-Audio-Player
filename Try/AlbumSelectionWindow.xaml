@@ -1,0 +1,17 @@
+﻿<Window x:Class="Try.AlbumSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Try"
+        mc:Ignorable="d"
+        Title="AlbumSelectionWindow" Height="300" Width="300">
+    <Grid>
+        <Button x:Name="ConfurmBandNameButton" Content="Ok" Click="SelectArtistButton_OnClick" HorizontalAlignment="Right" Margin="0,50,10,0" VerticalAlignment="Top" Width="75" Height="25"/>
+        <TextBox x:Name="BandNameTextBox"  Height="30" HorizontalAlignment="Stretch" Margin="10,10,10,0" VerticalAlignment="Top" TextWrapping="Wrap" Text="TextBox" />
+        <TreeView x:Name="AlbumsTreeView" HorizontalAlignment="Stretch" Margin="10,85,10,45" VerticalAlignment="Stretch">
+        </TreeView>
+            <Button x:Name="AddAlbumTabButton" Content="Add Tab" Click="AddAlbumTabButton_OnClick" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Height="25"/>
+
+    </Grid>
+</Window>
